@@ -2,6 +2,12 @@
 
 Providing a basic starting point for implementing spring REST APIs.
 
+# Startup
+```
+# start server on port 8080
+gradle bootRun
+```
+
 # Usage
 
 ## Curl & jq
