@@ -1,4 +1,4 @@
-package hello;
+package training;
 
 // spring dependencies
 import org.springframework.boot.*;
