@@ -3,8 +3,6 @@ plugins {
     id 'java'
 }
 
-apply plugin: 'java'
-
 repositories {
   mavenCentral()
 }
@@ -15,10 +13,12 @@ targetCompatibility = 1.8
 dependencies {
   compile "joda-time:joda-time:2.2"
   compile "org.springframework.boot:spring-boot-starter-web:1.5.8.RELEASE"
+  compile "org.springframework.boot:spring-boot-starter-data-jpa"
+  compile "com.h2database:h2"
   testCompile "junit:junit:4.12"
 }
 
 jar {
-  baseName = 'gs-gradle'
+  baseName = 'spring_api_example_1'
   version =  '0.1.0'
 }
