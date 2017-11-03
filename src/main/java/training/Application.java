@@ -20,7 +20,6 @@ import training.concepts.customer.operations.Create;
 public class Application {
 
   public static final Logger logger = LoggerFactory.getLogger(Application.class);
-
   public static final Configuration configuration = new Configuration();
 
   public static void main(String[] args) {
