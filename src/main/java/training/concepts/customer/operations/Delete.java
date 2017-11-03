@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 
 
 @Service
-public class Show implements OperationInterface {
+public class Delete implements OperationInterface {
 
   @Autowired
   private CustomerRepository repository;
@@ -23,16 +23,12 @@ public class Show implements OperationInterface {
     Long customerId = (Long) params.get("customerId");
 
     Customer model = repository.findOne(customerId);
+    Application.logger.info(String.format("Found customer: %s", model.toString()));
+    repository.delete(model);
+    Application.logger.info(String.format("Deleted customer!"));
 
-    Application.logger.info("Found Customer: {}", model);
-    HttpStatus status = HttpStatus.OK;
-    if (model == null) {
-      Application.logger.info("Could not find customer with id: {}", customerId);
-      status = HttpStatus.NOT_FOUND;
-    }
-
-    payload.put("httpStatus", status);
-    payload.put("model", model);
+    payload.put("httpStatus", HttpStatus.NO_CONTENT);
+    payload.put("model", null);
     return payload;
   }
 }

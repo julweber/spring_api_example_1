@@ -41,10 +41,10 @@ curl -v 'localhost:8080/customers' |jq '.'
 curl -v 'localhost:8080/customers/1' |jq '.'
 
 # Create a customer
-curl -v -X POST -d '{ "email" : "new@example.com"}' 'localhost:8080/customers' |jq '.'
+curl -v -X POST -d '{ "email" : "new@example.com", "password": "test123" }' 'localhost:8080/customers' -H 'Content-Type: application/json' |jq '.'
 
 # Update a customer
-curl -v -X PUT -d '{ "email":"test@example.com" }' 'localhost:8080/customers/1' |jq '.'
+curl -v -X PUT -d '{ "email":"test@example.com" }' 'localhost:8080/customers/1' -H 'Content-Type: application/json' |jq '.'
 
 # Delete a customer
 curl -v -X DELETE 'localhost:8080/customers/1'

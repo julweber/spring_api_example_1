@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
 
 
 @Service
@@ -18,14 +18,27 @@ public class Create implements OperationInterface {
 
   public Map<String, Object> run(Map<String, Object> payload) {
     Map params = (Map) payload.get("params");
-    String email = (String) params.get("email");
-    Customer model = new Customer(email, null, null);
+    Customer model = (Customer) params.get("customer");
 
+    if (model.getPassword() == null) {
+      payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
+      payload.put("model", null);
+      // TODO: add error response
+      return payload;
+    }
+
+    if (!repository.findByEmail(model.getEmail()).isEmpty() ) {
+      // TODO: add error response
+      payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
+      payload.put("model", null);
+      return payload;
+    }
+
+    model.setRank(0);
     repository.save(model);
-
-    payload.put("httpStatus", 200);
+    payload.put("httpStatus", HttpStatus.CREATED);
     payload.put("model", model);
-    payload.put("json", "{}");
+
     return payload;
   }
 }

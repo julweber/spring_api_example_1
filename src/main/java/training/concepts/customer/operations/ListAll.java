@@ -6,32 +6,25 @@ import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 
 
 @Service
-public class Show implements OperationInterface {
+public class ListAll implements OperationInterface {
 
   @Autowired
   private CustomerRepository repository;
 
   public Map<String, Object> run(Map<String, Object> payload) {
-    // fetch an individual customer by ID
-    Map params = (Map) payload.get("params");
-    Long customerId = (Long) params.get("customerId");
+    Iterable<Customer> all = repository.findAll();
+    List<Customer> model = Lists.newArrayList(all);
+    Application.logger.info("Found Customers: {}", model);
 
-    Customer model = repository.findOne(customerId);
-
-    Application.logger.info("Found Customer: {}", model);
-    HttpStatus status = HttpStatus.OK;
-    if (model == null) {
-      Application.logger.info("Could not find customer with id: {}", customerId);
-      status = HttpStatus.NOT_FOUND;
-    }
-
-    payload.put("httpStatus", status);
+    payload.put("httpStatus", HttpStatus.OK);
     payload.put("model", model);
     return payload;
   }
