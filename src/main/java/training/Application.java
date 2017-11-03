@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import training.Configuration;
 import training.concepts.customer.CustomerRepository;
 import training.concepts.customer.Customer;
 import training.concepts.customer.operations.Create;
@@ -19,6 +21,8 @@ public class Application {
 
   public static final Logger logger = LoggerFactory.getLogger(Application.class);
 
+  public static final Configuration configuration = new Configuration();
+
   public static void main(String[] args) {
       SpringApplication.run(Application.class, args);
   }
@@ -26,6 +30,11 @@ public class Application {
   @Bean
 	public CommandLineRunner demo(CustomerRepository repository) {
 		return (args) -> {
+
+      // Log out configuration
+      logger.info("Configuration:");
+      logger.info(configuration.toString());
+
 			// save a couple of customers
 			repository.save(new Customer("mj@jackson.com", "Michael", "Jackson"));
       repository.save(new Customer("james@brown.com", "James", "Brown"));
