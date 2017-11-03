@@ -1,4 +1,4 @@
-package training;
+package training.api;
 
 import training.Application;
 import training.concepts.customer.operations.Create;
@@ -29,7 +29,8 @@ public class CustomerController {
   @Autowired
   private Show showOperation;
 
-  @RequestMapping(value="/customers/{customerId}", method = RequestMethod.GET)
+  @RequestMapping(value="/customers/{customerId}", method = RequestMethod.GET,
+    produces = "application/json")
   public Customer get(@PathVariable("customerId") Long id) {
     Map<String, Object> payload = new HashMap();
     Map<String, Object> params = new HashMap();

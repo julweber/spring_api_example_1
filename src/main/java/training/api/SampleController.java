@@ -1,5 +1,6 @@
-package training;
+package training.api;
 
+import training.Greeter;
 // spring dependencies
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
