@@ -9,10 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
-// remove later
-import java.util.Map;
-import java.util.HashMap;
-
 import training.concepts.customer.CustomerRepository;
 import training.concepts.customer.Customer;
 import training.concepts.customer.operations.Create;
@@ -21,7 +17,7 @@ import training.concepts.customer.operations.Create;
 @EnableJpaRepositories(basePackages="training")
 public class Application {
 
-  private static final Logger logger = LoggerFactory.getLogger(Application.class);
+  public static final Logger logger = LoggerFactory.getLogger(Application.class);
 
   public static void main(String[] args) {
       SpringApplication.run(Application.class, args);
@@ -59,19 +55,19 @@ public class Application {
 			}
 			logger.info("");
 
-      // example operation usage
-      logger.info("Calling example operation customer.Create");
-      Map<String, Object> payload = new HashMap();
-      Map<String, Object> params = new HashMap();
-      params.put("email", "test@example.com");
-      payload.put("params", params);
-
-      Create op = new Create(repository);
-      Map result = op.run(payload);
-      Customer createdCustomer = (Customer) result.get("model");
-
-      logger.info(createdCustomer.toString());
-      logger.info("");
+      // // example operation usage
+      // logger.info("Calling example operation customer.Create");
+      // Map<String, Object> payload = new HashMap();
+      // Map<String, Object> params = new HashMap();
+      // params.put("email", "test@example.com");
+      // payload.put("params", params);
+      //
+      // Create op = new Create();
+      // Map result = op.run(payload);
+      // Customer createdCustomer = (Customer) result.get("model");
+      //
+      // logger.info(createdCustomer.toString());
+      // logger.info("");
 		};
 	}
 
