@@ -12,6 +12,16 @@ gradle build
 gradle runBoot
 ```
 
+# Environment configuration
+
+You can configure the server's behavior with OS environment variables as follows:
+
+```
+export RESULTS_PER_PAGE=10
+export DEFAULT_GENRE=jazz
+gradle bootRun
+```
+
 ## Curl & jq
 
 curl is a tool to send http requests from the console.
