@@ -23,6 +23,23 @@ public class Customer {
     this.lastName = lastName;
   }
 
+  // TODO: separate representation from model -> CustomerRepresenter
+  public Long getId() {
+    return this.id;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public String getFirstName() {
+    return this.firstName;
+  }
+
+  public String getLastName() {
+    return this.firstName;
+  }
+
   @Override
   public String toString() {
       return String.format(
