@@ -40,7 +40,7 @@ public class CustomerController {
   private Delete deleteOperation;
 
   // GET a list of customers
-  @RequestMapping(value="customers", method = RequestMethod.GET,
+  @RequestMapping(value="/customers", method = RequestMethod.GET,
     produces = "application/json")
   public ResponseEntity<?> list() {
     Map<String, Object> payload = new HashMap();
