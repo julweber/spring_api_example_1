@@ -18,6 +18,7 @@ public class Show implements OperationInterface {
   private CustomerRepository repository;
 
   public Map<String, Object> run(Map<String, Object> payload) {
+    Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
     // fetch an individual customer by ID
     Map params = (Map) payload.get("params");
     Long customerId = (Long) params.get("customerId");

@@ -1,5 +1,6 @@
 package training.concepts.customer.operations;
 
+import training.Application;
 import training.concepts.OperationInterface;
 import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
@@ -17,6 +18,7 @@ public class Create implements OperationInterface {
   private CustomerRepository repository;
 
   public Map<String, Object> run(Map<String, Object> payload) {
+    Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
     Map params = (Map) payload.get("params");
     Customer model = (Customer) params.get("customer");
 

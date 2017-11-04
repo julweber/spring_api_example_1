@@ -20,6 +20,7 @@ public class ListAll implements OperationInterface {
   private CustomerRepository repository;
 
   public Map<String, Object> run(Map<String, Object> payload) {
+    Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
     Iterable<Customer> all = repository.findAll();
     List<Customer> model = Lists.newArrayList(all);
     Application.logger.info("Found Customers: {}", model);
