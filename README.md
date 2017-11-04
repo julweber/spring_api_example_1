@@ -40,8 +40,11 @@ curl -v 'localhost:8080/customers' |jq '.'
 # Retrieve single customer
 curl -v 'localhost:8080/customers/1' |jq '.'
 
-# Create a customer
+# Create a customer with required params
 curl -v -X POST -d '{ "email" : "new@example.com", "password": "test123" }' 'localhost:8080/customers' -H 'Content-Type: application/json' |jq '.'
+
+# Create a customer with full params
+curl -v -X POST -d '{ "email" : "clark@gable.com", "password": "test123", "firstName":"Clark", "lastName":"Gable" }' 'localhost:8080/customers' -H 'Content-Type: application/json' |jq '.'
 
 # Update a customer
 curl -v -X PUT -d '{ "email":"test@example.com" }' 'localhost:8080/customers/1' -H 'Content-Type: application/json' |jq '.'
