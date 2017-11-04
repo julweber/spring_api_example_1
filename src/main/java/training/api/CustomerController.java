@@ -7,10 +7,13 @@ import training.concepts.customer.operations.Delete;
 import training.concepts.customer.operations.Update;
 import training.concepts.customer.operations.ListAll;
 import training.concepts.customer.Customer;
+import training.concepts.customer.representers.FullRepresenter;
+import training.concepts.customer.representers.ShortRepresenter;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-public class CustomerController {
+public class CustomerController extends BaseController {
 
   @Autowired
   private Create createOperation;
@@ -48,7 +51,10 @@ public class CustomerController {
     payload.put("params", params);
 
     Map result = listOperation.run(payload);
-    ResponseEntity entity = new ResponseEntity<List<Customer>>((List<Customer>) result.get("model"),
+    List customers = (List<Customer>) result.get("model");
+    List list = convertToRepresentedList(customers);
+
+    ResponseEntity entity = new ResponseEntity<List<ShortRepresenter>>(list,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
@@ -63,7 +69,9 @@ public class CustomerController {
     payload.put("params", params);
 
     Map result = createOperation.run(payload);
-    ResponseEntity entity = new ResponseEntity<Customer>((Customer) result.get("model"),
+    Customer cust = (Customer) result.get("model");
+    FullRepresenter rep = new FullRepresenter(cust);
+    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
@@ -79,7 +87,9 @@ public class CustomerController {
     payload.put("params", params);
 
     Map result = updateOperation.run(payload);
-    ResponseEntity entity = new ResponseEntity<Customer>((Customer) result.get("model"),
+    Customer cust = (Customer) result.get("model");
+    FullRepresenter rep = new FullRepresenter(cust);
+    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
@@ -95,7 +105,9 @@ public class CustomerController {
     payload.put("params", params);
 
     Map result = showOperation.run(payload);
-    ResponseEntity<Customer> entity = new ResponseEntity<Customer>((Customer) result.get("model"),
+    Customer cust = (Customer) result.get("model");
+    FullRepresenter rep = new FullRepresenter(cust);
+    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
@@ -112,6 +124,17 @@ public class CustomerController {
     Map result = deleteOperation.run(payload);
     ResponseEntity<Void> entity = new ResponseEntity<Void>((HttpStatus) result.get("httpStatus"));
     return entity;
+  }
+
+  // converts a list of customers to a list of customer ShortRepresenters for output via json
+  private List convertToRepresentedList(List<Customer> inputList) {
+    List<ShortRepresenter> list = new ArrayList<ShortRepresenter>();
+
+    for (Customer cust : inputList) {
+      ShortRepresenter rep = new ShortRepresenter(cust);
+      list.add(rep);
+    }
+    return list;
   }
 
 }
