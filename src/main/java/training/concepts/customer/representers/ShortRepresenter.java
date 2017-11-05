@@ -1,8 +1,9 @@
 package training.concepts.customer.representers;
 
 import training.concepts.customer.Customer;
+import training.concepts.application.Representer;
 
-public class ShortRepresenter {
+public class ShortRepresenter extends Representer {
 
   protected Customer customer;
 
