@@ -4,6 +4,7 @@ import training.Application;
 import training.api.BaseController;
 import training.concepts.record.operations.RecordListAll;
 import training.concepts.record.operations.RecordShow;
+import training.concepts.record.operations.RecordDelete;
 
 import training.concepts.record.Record;
 import training.concepts.application.Representer;
@@ -28,6 +29,9 @@ public class RecordControllerV1 extends BaseController {
 
   @Autowired
   private RecordListAll listOperation;
+
+  @Autowired
+  private RecordDelete deleteOperation;
 
   // This is almost identical to the CustomerController implementation of the list Endpoints
   // The logic is encapsulated in the record.ListAll operation
@@ -61,6 +65,21 @@ public class RecordControllerV1 extends BaseController {
     Representer rep = (Representer) result.get("representer");
     ResponseEntity entity = new ResponseEntity<Representer>(rep,
       (HttpStatus) result.get("httpStatus"));
+    return entity;
+  }
+
+  // DELETE single record -> record.RecordDelete operation
+  @RequestMapping(value="/v1/records/{recordId}", method = RequestMethod.DELETE,
+    produces = "application/json")
+  public ResponseEntity<Void> delete(@PathVariable("recordId") Long id) {
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("recordId", id);
+    payload.put("params", params);
+
+    Map<String, Object> result = deleteOperation.run(payload);
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep, (HttpStatus) result.get("httpStatus"));
     return entity;
   }
 
