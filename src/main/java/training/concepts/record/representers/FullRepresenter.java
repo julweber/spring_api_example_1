@@ -23,6 +23,9 @@ public class FullRepresenter extends ShortRepresenter {
     if (this.record == null) {
       return null;
     }
+    if (this.record.getCustomer() == null) {
+      return null;
+    }
     return this.record.getCustomer().getId();
   }
 

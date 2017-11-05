@@ -2,6 +2,8 @@ package training.concepts.record;
 
 import training.concepts.customer.Customer;
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 public class Record {
@@ -25,7 +27,6 @@ public class Record {
     this.title = title;
   }
 
-  // TODO: separate representation from model -> CustomerRepresenter
   public Long getId() {
     return this.id;
   }

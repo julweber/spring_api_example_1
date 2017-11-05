@@ -5,8 +5,10 @@ import training.api.BaseController;
 import training.concepts.record.operations.RecordListAll;
 import training.concepts.record.operations.RecordShow;
 import training.concepts.record.operations.RecordDelete;
+import training.concepts.record.operations.RecordCreate;
 
 import training.concepts.record.Record;
+import training.concepts.record.json.RecordJson;
 import training.concepts.application.Representer;
 
 import java.util.Map;
@@ -32,6 +34,25 @@ public class RecordControllerV1 extends BaseController {
 
   @Autowired
   private RecordDelete deleteOperation;
+
+  @Autowired
+  private RecordCreate createOperation;
+
+  // POST new record -> record.RecordCreate operation
+  @RequestMapping(value = "/v1/records", method = RequestMethod.POST,
+    produces = "application/json", consumes = "application/json")
+  public ResponseEntity<?> create(@RequestBody RecordJson record) {
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put("record", record);
+    payload.put("params", params);
+
+    Map<String, Object> result = createOperation.run(payload);
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep,
+      (HttpStatus) result.get("httpStatus"));
+    return entity;
+  }
 
   // This is almost identical to the CustomerController implementation of the list Endpoints
   // The logic is encapsulated in the record.ListAll operation
