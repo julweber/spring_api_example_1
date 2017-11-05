@@ -4,9 +4,14 @@ import training.Application;
 import training.concepts.OperationInterface;
 import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
+import training.concepts.customer.representers.ListRepresenter;
+
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
+
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +29,11 @@ public class ListAll implements OperationInterface {
     Iterable<Customer> all = repository.findAll();
     List<Customer> model = Lists.newArrayList(all);
     Application.logger.info("Found Customers: {}", model);
+    ListRepresenter rep = new ListRepresenter(model);
 
     payload.put("httpStatus", HttpStatus.OK);
     payload.put("model", model);
+    payload.put("representer", rep);
     return payload;
   }
 }

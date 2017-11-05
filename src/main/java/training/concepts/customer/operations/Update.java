@@ -4,6 +4,10 @@ import training.Application;
 import training.concepts.OperationInterface;
 import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
+import training.concepts.application.Representer;
+import training.concepts.application.ErrorRepresenter;
+import training.concepts.customer.representers.FullRepresenter;
+
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class Update implements OperationInterface {
     if (model == null) {
       payload.put("httpStatus", HttpStatus.NOT_FOUND);
       payload.put("model", null);
+      ErrorRepresenter rep = new ErrorRepresenter("NOT_FOUND",
+        String.format("No customer with id: %d could be found!", customerId));
+      payload.put("representer", rep);
       return payload;
     }
 
@@ -50,6 +57,8 @@ public class Update implements OperationInterface {
 
     payload.put("httpStatus", HttpStatus.OK);
     payload.put("model", model);
+    FullRepresenter rep = new FullRepresenter(model);
+    payload.put("representer", rep);
     return payload;
   }
 }

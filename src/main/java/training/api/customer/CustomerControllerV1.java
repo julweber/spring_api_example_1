@@ -8,13 +8,13 @@ import training.concepts.customer.operations.Delete;
 import training.concepts.customer.operations.Update;
 import training.concepts.customer.operations.ListAll;
 import training.concepts.customer.Customer;
+import training.concepts.application.Representer;
 import training.concepts.customer.representers.FullRepresenter;
 import training.concepts.customer.representers.ShortRepresenter;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +43,7 @@ public class CustomerControllerV1 extends BaseController {
   @Autowired
   private Delete deleteOperation;
 
-  // GET a list of customers
+  // GET a list of customers -> customer.ListAll operation
   @RequestMapping(value="/v1/customers", method = RequestMethod.GET,
     produces = "application/json")
   public ResponseEntity<?> list() {
@@ -52,15 +52,14 @@ public class CustomerControllerV1 extends BaseController {
     payload.put("params", params);
 
     Map<String, Object> result = listOperation.run(payload);
-    List<Customer> customers = (List<Customer>) result.get("model");
-    List<ShortRepresenter> list = convertToRepresentedList(customers);
+    Representer list = (Representer) result.get("representer");
 
-    ResponseEntity entity = new ResponseEntity<List<ShortRepresenter>>(list,
+    ResponseEntity entity = new ResponseEntity<Representer>(list,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
 
-  // POST new customer
+  // POST new customer -> customer.Create operation
   @RequestMapping(value = "/v1/customers", method = RequestMethod.POST,
     produces = "application/json", consumes = "application/json")
   public ResponseEntity<?> create(@RequestBody Customer customer) {
@@ -70,14 +69,13 @@ public class CustomerControllerV1 extends BaseController {
     payload.put("params", params);
 
     Map<String, Object> result = createOperation.run(payload);
-    Customer cust = (Customer) result.get("model");
-    FullRepresenter rep = new FullRepresenter(cust);
-    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
 
-  // UPDATE (PUT) single customer
+  // UPDATE (PUT) single customer -> customer.Update operation
   @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.PUT,
     produces = "application/json", consumes = "application/json")
   public ResponseEntity<?> update(@PathVariable("customerId") Long id, @RequestBody Customer customer) {
@@ -88,15 +86,14 @@ public class CustomerControllerV1 extends BaseController {
     payload.put("params", params);
 
     Map<String, Object> result = updateOperation.run(payload);
-    Customer cust = (Customer) result.get("model");
-    FullRepresenter rep = new FullRepresenter(cust);
-    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
 
 
-  // GET single customer
+  // GET single customer -> customer.Show operation
   @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.GET,
     produces = "application/json")
   public ResponseEntity<?> get(@PathVariable("customerId") Long id) {
@@ -106,14 +103,13 @@ public class CustomerControllerV1 extends BaseController {
     payload.put("params", params);
 
     Map<String, Object> result = showOperation.run(payload);
-    Customer cust = (Customer) result.get("model");
-    FullRepresenter rep = new FullRepresenter(cust);
-    ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep,
       (HttpStatus) result.get("httpStatus"));
     return entity;
   }
 
-  // DELETE single customer
+  // DELETE single customer -> customer.Delete operation
   @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.DELETE,
     produces = "application/json")
   public ResponseEntity<Void> delete(@PathVariable("customerId") Long id) {
@@ -123,19 +119,9 @@ public class CustomerControllerV1 extends BaseController {
     payload.put("params", params);
 
     Map<String, Object> result = deleteOperation.run(payload);
-    ResponseEntity<Void> entity = new ResponseEntity<Void>((HttpStatus) result.get("httpStatus"));
+    Representer rep = (Representer) result.get("representer");
+    ResponseEntity entity = new ResponseEntity<Representer>(rep, (HttpStatus) result.get("httpStatus"));
     return entity;
-  }
-
-  // converts a list of customers to a list of customer ShortRepresenters for output via json
-  private List convertToRepresentedList(List<Customer> inputList) {
-    List<ShortRepresenter> list = new ArrayList<ShortRepresenter>();
-
-    for (Customer cust : inputList) {
-      ShortRepresenter rep = new ShortRepresenter(cust);
-      list.add(rep);
-    }
-    return list;
   }
 
 }

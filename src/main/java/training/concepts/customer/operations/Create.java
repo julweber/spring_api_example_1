@@ -4,6 +4,9 @@ import training.Application;
 import training.concepts.OperationInterface;
 import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
+import training.concepts.customer.representers.FullRepresenter;
+import training.concepts.application.ErrorRepresenter;
+
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,9 @@ public class Create implements OperationInterface {
     if (model.getPassword() == null) {
       payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
       payload.put("model", null);
-      // TODO: add error response
+      ErrorRepresenter rep = new ErrorRepresenter("NO_PASSWORD",
+      "No password was provided!");
+      payload.put("representer", rep);
       return payload;
     }
 
@@ -33,6 +38,9 @@ public class Create implements OperationInterface {
       // TODO: add error response
       payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
       payload.put("model", null);
+      ErrorRepresenter rep = new ErrorRepresenter("EMAIL_TAKEN",
+      "There is already a customer with the given email address!");
+      payload.put("representer", rep);
       return payload;
     }
 
@@ -40,7 +48,8 @@ public class Create implements OperationInterface {
     repository.save(model);
     payload.put("httpStatus", HttpStatus.CREATED);
     payload.put("model", model);
-
+    FullRepresenter rep = new FullRepresenter(model);
+    payload.put("representer", rep);
     return payload;
   }
 }

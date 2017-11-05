@@ -4,6 +4,9 @@ import training.Application;
 import training.concepts.OperationInterface;
 import training.concepts.customer.Customer;
 import training.concepts.customer.CustomerRepository;
+import training.concepts.customer.representers.FullRepresenter;
+import training.concepts.application.ErrorRepresenter;
+
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +29,23 @@ public class Show implements OperationInterface {
     Customer model = repository.findOne(customerId);
 
     Application.logger.info("Found Customer: {}", model);
-    HttpStatus status = HttpStatus.OK;
+
+    // Set representer, httpstatus and model according to result
     if (model == null) {
       Application.logger.info("Could not find customer with id: {}", customerId);
-      status = HttpStatus.NOT_FOUND;
+      ErrorRepresenter errorRepresenter = new ErrorRepresenter("NOT_FOUND",
+        String.format("The custmer with id: %d could not be found!", customerId));
+      payload.put("httpStatus", HttpStatus.NOT_FOUND);
+      payload.put("representer", errorRepresenter);
+      payload.put("model", null);
+      return payload;
+    } else {
+      payload.put("httpStatus", HttpStatus.OK);
+      FullRepresenter rep = new FullRepresenter(model);
+      payload.put("representer", rep);
+      payload.put("model", model);
+      return payload;
     }
 
-    payload.put("httpStatus", status);
-    payload.put("model", model);
-    return payload;
   }
 }
