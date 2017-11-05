@@ -35,7 +35,6 @@ public class Create implements OperationInterface {
     }
 
     if (!repository.findByEmail(model.getEmail()).isEmpty() ) {
-      // TODO: add error response
       payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
       payload.put("model", null);
       ErrorRepresenter rep = new ErrorRepresenter("EMAIL_TAKEN",

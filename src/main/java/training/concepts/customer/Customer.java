@@ -39,7 +39,6 @@ public class Customer {
       this.rank = 0;
   }
 
-  // TODO: separate representation from model -> CustomerRepresenter
   public Long getId() {
     return this.id;
   }
