@@ -9,7 +9,7 @@ Providing a basic starting point for implementing spring REST APIs.
 gradle build
 
 # Start server on port 8080
-gradle runBoot
+gradle bootRun
 ```
 
 # Database Scripts
