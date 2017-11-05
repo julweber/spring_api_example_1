@@ -68,7 +68,7 @@ curl -v -X DELETE 'localhost:8080/v1/customers/1'
 curl -v 'localhost:8080/v1/records' |jq '.'
 
 # Retrieve a list of records for a certain customer id
-curl -v 'localhost:8080/v1/records?customer_id=1'
+curl -v 'localhost:8080/v1/records?customerId=1' |jq '.'
 
 # Retrieve single record
 curl -v 'localhost:8080/v1/records/1' |jq '.'
