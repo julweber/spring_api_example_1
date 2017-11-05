@@ -12,6 +12,13 @@ gradle build
 gradle runBoot
 ```
 
+# Database Scripts
+
+```
+# Reset the database completely (DROP + CREATE)
+db/reset_database.sh
+```
+
 # Environment configuration
 
 You can configure the server's behavior with OS environment variables as follows:

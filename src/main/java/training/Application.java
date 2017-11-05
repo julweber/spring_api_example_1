@@ -35,33 +35,50 @@ public class Application {
       logger.info(configuration.toString());
 
 			// save a couple of customers
-			repository.save(new Customer("mj@jackson.com", "Michael", "Jackson"));
-      repository.save(new Customer("james@brown.com", "James", "Brown"));
-			repository.save(new Customer("jimi@hendrix.com", "Jimi", "Hendrix"));
-			repository.save(new Customer("marvin@gaye.com", "Marvin", "Gaye"));
+      if (repository.count() < 1) {
+        Customer cust1 = new Customer("mj@jackson.com", "Michael", "Jackson");
+        cust1.setRank(0);
+        cust1.setPassword("test123");
+  			repository.save(cust1);
 
-			// fetch all customers
-			logger.info("Customers found with findAll():");
-			logger.info("-------------------------------");
-			for (Customer customer : repository.findAll()) {
-				logger.info(customer.toString());
-			}
-			logger.info("");
+        Customer cust2 = new Customer("james@brown.com", "James", "Brown");
+        cust2.setRank(1);
+        cust2.setPassword("test123");
+  			repository.save(cust2);
 
-			// fetch an individual customer by ID
-			Customer customer = repository.findOne(1L);
-			logger.info("Customer found with findOne(1L):");
-			logger.info("--------------------------------");
-			logger.info(customer.toString());
-			logger.info("");
+        Customer cust3 = new Customer("jimi@hendrix.com", "Jimi", "Hendrix");
+        cust3.setRank(2);
+        cust3.setPassword("test123");
+  			repository.save(cust3);
 
-			// fetch customers by email
-			logger.info("Customer found with findByEmail('mj@jackson.com'):");
-			logger.info("--------------------------------------------");
-			for (Customer mj : repository.findByEmail("mj@jackson.com")) {
-				logger.info(mj.toString());
-			}
-			logger.info("");
+        Customer cust4 = new Customer("marvin@gaye.com", "Marvin", "Gaye");
+        cust4.setRank(3);
+        cust4.setPassword("test123");
+  			repository.save(cust4);
+      }
+
+			// // fetch all customers
+			// logger.info("Customers found with findAll():");
+			// logger.info("-------------------------------");
+			// for (Customer customer : repository.findAll()) {
+			// 	logger.info(customer.toString());
+			// }
+			// logger.info("");
+      //
+			// // fetch an individual customer by ID
+			// Customer customer = repository.findOne(1L);
+			// logger.info("Customer found with findOne(1L):");
+			// logger.info("--------------------------------");
+			// logger.info(customer.toString());
+			// logger.info("");
+      //
+			// // fetch customers by email
+			// logger.info("Customer found with findByEmail('mj@jackson.com'):");
+			// logger.info("--------------------------------------------");
+			// for (Customer mj : repository.findByEmail("mj@jackson.com")) {
+			// 	logger.info(mj.toString());
+			// }
+			// logger.info("");
 
       // // example operation usage
       // logger.info("Calling example operation customer.Create");
