@@ -1,6 +1,7 @@
-package training.api;
+package training.api.customer;
 
 import training.Application;
+import training.api.BaseController;
 import training.concepts.customer.operations.Create;
 import training.concepts.customer.operations.Show;
 import training.concepts.customer.operations.Delete;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-public class CustomerController extends BaseController {
+public class CustomerControllerV1 extends BaseController {
 
   @Autowired
   private Create createOperation;
@@ -43,16 +44,16 @@ public class CustomerController extends BaseController {
   private Delete deleteOperation;
 
   // GET a list of customers
-  @RequestMapping(value="/customers", method = RequestMethod.GET,
+  @RequestMapping(value="/v1/customers", method = RequestMethod.GET,
     produces = "application/json")
   public ResponseEntity<?> list() {
-    Map<String, Object> payload = new HashMap();
-    Map<String, Object> params = new HashMap();
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
     payload.put("params", params);
 
-    Map result = listOperation.run(payload);
-    List customers = (List<Customer>) result.get("model");
-    List list = convertToRepresentedList(customers);
+    Map<String, Object> result = listOperation.run(payload);
+    List<Customer> customers = (List<Customer>) result.get("model");
+    List<ShortRepresenter> list = convertToRepresentedList(customers);
 
     ResponseEntity entity = new ResponseEntity<List<ShortRepresenter>>(list,
       (HttpStatus) result.get("httpStatus"));
@@ -60,15 +61,15 @@ public class CustomerController extends BaseController {
   }
 
   // POST new customer
-  @RequestMapping(value = "/customers", method = RequestMethod.POST,
+  @RequestMapping(value = "/v1/customers", method = RequestMethod.POST,
     produces = "application/json", consumes = "application/json")
   public ResponseEntity<?> create(@RequestBody Customer customer) {
-    Map<String, Object> payload = new HashMap();
-    Map<String, Object> params = new HashMap();
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
     params.put("customer", customer);
     payload.put("params", params);
 
-    Map result = createOperation.run(payload);
+    Map<String, Object> result = createOperation.run(payload);
     Customer cust = (Customer) result.get("model");
     FullRepresenter rep = new FullRepresenter(cust);
     ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
@@ -77,16 +78,16 @@ public class CustomerController extends BaseController {
   }
 
   // UPDATE (PUT) single customer
-  @RequestMapping(value="/customers/{customerId}", method = RequestMethod.PUT,
+  @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.PUT,
     produces = "application/json", consumes = "application/json")
   public ResponseEntity<?> update(@PathVariable("customerId") Long id, @RequestBody Customer customer) {
-    Map<String, Object> payload = new HashMap();
-    Map<String, Object> params = new HashMap();
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
     params.put("customerId", id);
     params.put("customer", customer);
     payload.put("params", params);
 
-    Map result = updateOperation.run(payload);
+    Map<String, Object> result = updateOperation.run(payload);
     Customer cust = (Customer) result.get("model");
     FullRepresenter rep = new FullRepresenter(cust);
     ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
@@ -96,15 +97,15 @@ public class CustomerController extends BaseController {
 
 
   // GET single customer
-  @RequestMapping(value="/customers/{customerId}", method = RequestMethod.GET,
+  @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.GET,
     produces = "application/json")
   public ResponseEntity<?> get(@PathVariable("customerId") Long id) {
-    Map<String, Object> payload = new HashMap();
-    Map<String, Object> params = new HashMap();
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
     params.put("customerId", id);
     payload.put("params", params);
 
-    Map result = showOperation.run(payload);
+    Map<String, Object> result = showOperation.run(payload);
     Customer cust = (Customer) result.get("model");
     FullRepresenter rep = new FullRepresenter(cust);
     ResponseEntity entity = new ResponseEntity<FullRepresenter>(rep,
@@ -113,15 +114,15 @@ public class CustomerController extends BaseController {
   }
 
   // DELETE single customer
-  @RequestMapping(value="/customers/{customerId}", method = RequestMethod.DELETE,
+  @RequestMapping(value="/v1/customers/{customerId}", method = RequestMethod.DELETE,
     produces = "application/json")
   public ResponseEntity<Void> delete(@PathVariable("customerId") Long id) {
-    Map<String, Object> payload = new HashMap();
-    Map<String, Object> params = new HashMap();
+    Map<String, Object> payload = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<String, Object>();
     params.put("customerId", id);
     payload.put("params", params);
 
-    Map result = deleteOperation.run(payload);
+    Map<String, Object> result = deleteOperation.run(payload);
     ResponseEntity<Void> entity = new ResponseEntity<Void>((HttpStatus) result.get("httpStatus"));
     return entity;
   }

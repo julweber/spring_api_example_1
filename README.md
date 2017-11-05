@@ -35,20 +35,20 @@ curl can be combined with a piped jq call to display request responses on the co
 curl -v 'localhost:8080/greeting?name=Sire' |jq '.'
 
 # Retrieve a list of customers
-curl -v 'localhost:8080/customers' |jq '.'
+curl -v 'localhost:8080/v1/customers' |jq '.'
 
 # Retrieve single customer
-curl -v 'localhost:8080/customers/1' |jq '.'
+curl -v 'localhost:8080/v1/customers/1' |jq '.'
 
 # Create a customer with required params
-curl -v -X POST -d '{ "email" : "new@example.com", "password": "test123" }' 'localhost:8080/customers' -H 'Content-Type: application/json' |jq '.'
+curl -v -X POST -d '{ "email" : "new@example.com", "password": "test123" }' 'localhost:8080/v1/customers' -H 'Content-Type: application/json' |jq '.'
 
 # Create a customer with full params
-curl -v -X POST -d '{ "email" : "clark@gable.com", "password": "test123", "firstName":"Clark", "lastName":"Gable" }' 'localhost:8080/customers' -H 'Content-Type: application/json' |jq '.'
+curl -v -X POST -d '{ "email" : "clark@gable.com", "password": "test123", "firstName":"Clark", "lastName":"Gable" }' 'localhost:8080/v1/customers' -H 'Content-Type: application/json' |jq '.'
 
 # Update a customer
-curl -v -X PUT -d '{ "email":"test@example.com" }' 'localhost:8080/customers/1' -H 'Content-Type: application/json' |jq '.'
+curl -v -X PUT -d '{ "email":"test@example.com" }' 'localhost:8080/v1/customers/1' -H 'Content-Type: application/json' |jq '.'
 
 # Delete a customer
-curl -v -X DELETE 'localhost:8080/customers/1'
+curl -v -X DELETE 'localhost:8080/v1/customers/1'
 ```
