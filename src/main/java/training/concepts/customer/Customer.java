@@ -1,21 +1,26 @@
 package training.concepts.customer;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import training.concepts.record.Record;
+
+import java.util.Set;
+
+import javax.persistence.*;
 
 @Entity
 public class Customer {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @SequenceGenerator(name = "seq_customers", sequenceName = "seq_customers")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_customers")
   private Long id;
   private String email;
   private String password;
   private String firstName;
   private String lastName;
   private Integer rank;
+
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+  private Set<Record> records;
 
   protected Customer() {}
 
@@ -81,6 +86,14 @@ public class Customer {
 
   public void setRank(Integer rank) {
     this.rank = rank;
+  }
+
+  public Set<Record> getRecords() {
+    return records;
+  }
+
+  public void setRecords(Set<Record> records) {
+      this.records = records;
   }
 
   @Override
