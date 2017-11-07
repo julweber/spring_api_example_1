@@ -17,6 +17,10 @@ dependencies {
   compile "com.google.guava:guava:23.3-jre"
   compile "org.postgresql:postgresql"
   testCompile "junit:junit:4.12"
+  
+  // dependencies for the REST client
+  compile "org.apache.httpcomponents:httpclient:4.1.1"
+  compile "com.googlecode.json-simple:json-simple:1.1.1"
 }
 
 jar {
