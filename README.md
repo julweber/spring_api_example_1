@@ -74,7 +74,7 @@ curl -v 'localhost:8080/v1/records?customerId=1' |jq '.'
 curl -v 'localhost:8080/v1/records/1' |jq '.'
 
 # Create a record with required params
-curl -v -X POST -d '{ "title" : "Experience", "artist": "Jimi Hendrix", "customer_id": 1 }' 'localhost:8080/v1/records' -H 'Content-Type: application/json' |jq '.'
+curl -v -X POST -d '{ "title" : "Experience", "artist": "Jimi Hendrix", "customerId": 1 }' 'localhost:8080/v1/records' -H 'Content-Type: application/json' |jq '.'
 
 # Create a record with full params
 curl -v -X POST -d '{ "title" : "Experience", "artist": "Jimi Hendrix", "customerId": 1, "genre":"Rock", "format":"12Inch" }' 'localhost:8080/v1/records' -H 'Content-Type: application/json' |jq '.'
