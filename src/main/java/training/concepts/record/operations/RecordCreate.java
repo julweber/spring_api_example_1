@@ -10,6 +10,11 @@ import training.concepts.customer.Customer;
 import training.concepts.application.ErrorRepresenter;
 import training.concepts.record.json.RecordJson;
 
+// add client class and dependent exceptions
+import training.clients.MessageRestClient;
+import java.io.IOException;
+import org.apache.http.client.ClientProtocolException;
+
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,9 @@ public class RecordCreate implements OperationInterface {
 
   @Autowired
   private CustomerRepository customerRepository;
+
+  // add rest client to send messages to the messages REST api
+  private MessageRestClient restClient;
 
   public Map<String, Object> run(Map<String, Object> payload) {
     Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
@@ -79,10 +87,26 @@ public class RecordCreate implements OperationInterface {
     model.setFormat(json.getFormat());
 
     repository.save(model);
+
+    sendMessage(model);
     payload.put("httpStatus", HttpStatus.CREATED);
     payload.put("model", model);
     FullRepresenter rep = new FullRepresenter(model);
     payload.put("representer", rep);
     return payload;
+  }
+
+  // request the messages API to send a message to the customer's email with record information
+  protected void sendMessage(Record record) {
+    try {
+      restClient = new MessageRestClient();
+      restClient.postMessage(record.getCustomer().getEmail(),
+        String.format("New Record added: %s", record.getTitle()),
+        String.format("Successfully added record: %s to your library!", record.toString()));
+    } catch (ClientProtocolException ex) {
+      Application.logger.info("Sending message to Messages API failed! Exception: {}", ex.toString());
+    } catch (IOException ex) {
+      Application.logger.info("Sending message to Messages API failed! Exception: {}", ex.toString());
+    }
   }
 }
