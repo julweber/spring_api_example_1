@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 
-import training.messaging.MessageSender;
+import training.messaging.AmqpSender;
 
 @Service
 public class RecordCreate implements OperationInterface {
@@ -36,15 +36,14 @@ public class RecordCreate implements OperationInterface {
   private MessageRestClient restClient;
 
   @Autowired
-  private MessageSender amqpClient;
+  private AmqpSender amqpClient;
 
   public Map<String, Object> run(Map<String, Object> payload) {
     Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
     Map params = (Map) payload.get("params");
     RecordJson json = (RecordJson) params.get("record");
 
-
-    Application.logger.info("Received record json object: {}", json);
+    Application.logger.info("Received record json object: {}", json.toString());
 
     if (json.getTitle() == null) {
       payload.put("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -92,7 +91,8 @@ public class RecordCreate implements OperationInterface {
 
     repository.save(model);
 
-    sendMessageViaQueue(model);
+    // send the record object as json representation
+    sendRecordViaQueue(model);
     payload.put("httpStatus", HttpStatus.CREATED);
     payload.put("model", model);
     FullRepresenter rep = new FullRepresenter(model);
@@ -118,5 +118,9 @@ public class RecordCreate implements OperationInterface {
     amqpClient.sendMessage(record.getCustomer().getEmail(),
       String.format("New Record added: %s", record.getTitle()),
       String.format("Successfully added record: %s to your library!", record.toString()));
+  }
+
+  protected void sendRecordViaQueue(Record record) {
+    amqpClient.sendRecord(record);
   }
 }

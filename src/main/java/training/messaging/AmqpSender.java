@@ -1,6 +1,7 @@
 package training.messaging;
 
 import training.Application;
+import training.concepts.record.Record;
 import training.messaging.MessageFormatter;
 
 import java.util.concurrent.TimeUnit;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class MessageSender {
+public class AmqpSender {
 
     private final RabbitTemplate rabbitTemplate;
     private final ConfigurableApplicationContext context;
 
-    public MessageSender(RabbitTemplate rabbitTemplate,
+    public AmqpSender(RabbitTemplate rabbitTemplate,
             ConfigurableApplicationContext context) {
         this.rabbitTemplate = rabbitTemplate;
         this.context = context;
@@ -34,7 +35,18 @@ public class MessageSender {
         rabbitTemplate.convertAndSend(Application.queueName, message);
       }
       catch (IOException ex) {
-        Application.logger.info("Exception while sending: {}", ex);
+        Application.logger.info("Exception while sending AMQP message: {}", ex);
+      }
+    }
+
+    public void sendRecord(Record record) {
+      try {
+        RecordFormatter formatter = new RecordFormatter();
+        String message = formatter.generateJsonString(record);
+        Application.logger.info("Sending message: {}", message);
+        rabbitTemplate.convertAndSend(Application.queueName, message);
+      } catch(IOException ex) {
+        Application.logger.info("Exception while sending AMQP message: {}", ex);
       }
     }
 }
