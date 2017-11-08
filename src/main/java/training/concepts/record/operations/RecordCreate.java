@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 
+import training.messaging.MessageSender;
 
 @Service
 public class RecordCreate implements OperationInterface {
@@ -33,6 +34,9 @@ public class RecordCreate implements OperationInterface {
 
   // add rest client to send messages to the messages REST api
   private MessageRestClient restClient;
+
+  @Autowired
+  private MessageSender amqpClient;
 
   public Map<String, Object> run(Map<String, Object> payload) {
     Application.logger.info("Running {} operation with payload: {}", this.getClass(), payload);
@@ -88,7 +92,7 @@ public class RecordCreate implements OperationInterface {
 
     repository.save(model);
 
-    sendMessage(model);
+    sendMessageViaQueue(model);
     payload.put("httpStatus", HttpStatus.CREATED);
     payload.put("model", model);
     FullRepresenter rep = new FullRepresenter(model);
@@ -97,7 +101,7 @@ public class RecordCreate implements OperationInterface {
   }
 
   // request the messages API to send a message to the customer's email with record information
-  protected void sendMessage(Record record) {
+  protected void sendMessageViaRest(Record record) {
     try {
       restClient = new MessageRestClient();
       restClient.postMessage(record.getCustomer().getEmail(),
@@ -108,5 +112,11 @@ public class RecordCreate implements OperationInterface {
     } catch (IOException ex) {
       Application.logger.info("Sending message to Messages API failed! Exception: {}", ex.toString());
     }
+  }
+
+  protected void sendMessageViaQueue(Record record) {
+    amqpClient.sendMessage(record.getCustomer().getEmail(),
+      String.format("New Record added: %s", record.getTitle()),
+      String.format("Successfully added record: %s to your library!", record.toString()));
   }
 }
