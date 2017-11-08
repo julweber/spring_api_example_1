@@ -24,6 +24,9 @@ dependencies {
 
   // adds rabbitmq connection features
   compile "org.springframework.boot:spring-boot-starter-amqp"
+
+  // health endpoint dependency
+  compile "org.springframework.boot:spring-boot-starter-actuator"
 }
 
 jar {

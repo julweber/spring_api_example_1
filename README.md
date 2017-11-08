@@ -85,4 +85,8 @@ curl -v -X PUT -d '{ "genre":"Funk" }' 'localhost:8080/v1/records/1' -H 'Content
 # Delete a record
 curl -v -X DELETE 'localhost:8080/v1/records/1'
 
+
+### Health status
+curl localhost:8080/health |jq '.'
+
 ```
