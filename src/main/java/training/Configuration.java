@@ -12,7 +12,7 @@ public class Configuration {
     String str = "";
     str += String.format("RESULTS_PER_PAGE: %d \n", RESULTS_PER_PAGE);
     str += String.format("DEFAULT_GENRE: %s \n", DEFAULT_GENRE);
-    str += String.format("QUEUE_NAME: %s \n", DEFAULT_GENRE);
+    str += String.format("QUEUE_NAME: %s \n", QUEUE_NAME);
     return str;
   }
 }
